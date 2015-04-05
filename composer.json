@@ -1,0 +1,24 @@
+{
+	"name": "flexcoders/flexpages",
+	"description": "Package to allow the creation of static HTML pages with framework integrations.",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Steve West",
+			"email": "steve.west@flexcoders.co.uk"
+		}
+	],
+	"require": {},
+	"require-dev": {
+		"codeception/codeception": "~2.0",
+		"scrutinizer/ocular": "dev-master"
+	},
+	"autoload": {
+		"psr-4": {
+			"FlexCoders\\FlexPages\\": "src/"
+		}
+	},
+	"config": {
+		"bin-dir": "bin"
+	}
+}

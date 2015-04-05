@@ -1,0 +1,27 @@
+language: php
+
+sudo: false
+
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - hhvm
+  - 7
+
+matrix:
+  allow_failures:
+    - php: 7
+
+services:
+  - mysql
+
+before_script:
+  - composer install
+
+script:
+  - bash -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ] && [ "$TRAVIS_PHP_VERSION" != "7" ]; then bin/codecept run unit --coverage-xml; fi;'
+  - bash -c 'if [ "$TRAVIS_PHP_VERSION" == "hhvm" ] || [ "$TRAVIS_PHP_VERSION" == "7" ]; then bin/codecept run unit; fi;'
+
+after_script:
+  - bash -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ] && [ "$TRAVIS_PHP_VERSION" != "7" ]; then php bin/ocular code-coverage:upload --format=php-clover tests/_output/coverage.xml; fi;'

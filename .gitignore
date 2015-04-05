@@ -1,0 +1,4 @@
+/vendor/
+/bin/
+/.codeception.yml
+/tests/_output/*
