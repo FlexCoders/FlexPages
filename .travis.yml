@@ -17,6 +17,7 @@ services:
   - mysql
 
 before_script:
+  - composer self-update
   - composer install
 
 script:
