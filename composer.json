@@ -8,11 +8,10 @@
 			"email": "steve.west@flexcoders.co.uk"
 		}
 	],
-	"require": {},
-	"require-dev": [
+	"require-dev": {
 		"codeception/codeception": "~2.0",
 		"scrutinizer/ocular": "dev-master"
-	],
+	},
 	"autoload": {
 		"psr-4": {
 			"FlexCoders\\FlexPages\\": "src/"
