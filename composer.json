@@ -19,5 +19,10 @@
 	},
 	"config": {
 		"bin-dir": "bin"
+	},
+	"require": {
+		"league/commonmark": "0.7.*",
+		"php": ">=5.4"
+
 	}
 }

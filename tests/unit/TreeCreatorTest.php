@@ -33,7 +33,7 @@ class TreeCreatorTest extends Test
 		$this->assertArrayHasKey('folders', $result);
 
 		$this->assertEquals(
-			['01-test.md', '02-something-else.md'],
+			['something-else.md', 'test.md',],
 			$result['files']
 		);
 
