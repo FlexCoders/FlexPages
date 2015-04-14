@@ -25,6 +25,18 @@ class Navigation
 	protected $translations = [];
 
 	/**
+	 * Base path of our MD files.
+	 * @var string
+	 */
+	protected $path;
+
+	/**
+	 * The current URI that is being accessed
+	 * @var string
+	 */
+	protected $uri;
+
+	/**
 	 * @param string $uri  Current request URI
 	 * @param string $path Base path for MD files
 	 */
