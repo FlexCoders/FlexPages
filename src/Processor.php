@@ -70,16 +70,37 @@ class Processor
 	 */
 	protected function loadFileContent($uri)
 	{
-		// Remove any "level up" directory indicators.
-		$filePath = $this->path . str_replace(['/..', '\..'], ['',''], '/' . $uri . '.md');
-		$realPath = realpath($filePath);
+		$realPath = $this->getMarkdownPath($uri);
 
-		if ( ! is_file($realPath))
+		if ( ! is_file($realPath) )
 		{
-			throw new UnknownPageException($uri . ' is not a known markdown file.');
+			// Try for an index.md
+			$realPath = $this->getMarkdownPath($uri.'/index');
+			if ( ! is_file($realPath) )
+			{
+				throw new UnknownPageException(
+					$uri . ' is not a known markdown file.'
+				);
+			}
 		}
 
 		return file_get_contents($realPath);
+	}
+
+	/**
+	 * Returns the file path that the given uri represents
+	 *
+	 * @param $uri
+	 *
+	 * @return string
+	 */
+	protected function getMarkdownPath($uri)
+	{
+		$filePath = $this->path .
+			// Remove any "level up" directory indicators.
+			str_replace(['/..', '\..'], ['', ''], '/' . $uri . '.md');
+
+		return realpath($filePath);
 	}
 
 }
