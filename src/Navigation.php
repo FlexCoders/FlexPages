@@ -88,20 +88,7 @@ class Navigation
 		foreach (explode('/', $this->uri) as $crumb)
 		{
 			$langChain .= $crumb;
-
-			// Check if we have a specific crumb translation
-			$lang = Arr::get($this->translations, '_breadcrumbs.'.$langChain.'._name');
-
-			// TODO: Clean this mess up.
-			if ($lang === null)
-			{
-				$lang = Arr::get($this->translations, '_breadcrumbs.'.$langChain);
-
-				if ($lang === null || is_array($lang))
-				{
-					$lang = Arr::get($this->translations, $crumb, $crumb);
-				}
-			}
+			$lang = $this->getTranslation('_breadcrumbs', $crumb, $langChain);
 
 			$crumbs[$crumb] = $lang;
 			$langChain .= '.';
@@ -110,6 +97,35 @@ class Navigation
 		return $crumbs;
 	}
 
+	/**
+	 * @param string $slug
+	 * @param string $slugPrefix
+	 *
+	 * @return string
+	 */
+	public function getTranslation($type, $slug, $slugPrefix)
+	{
+		// Check if we have a specific crumb translation
+		$lang = Arr::get(
+			$this->translations,
+			$type . '.' . $slugPrefix . '._name'
+		);
 
+		// TODO: Clean this mess up.
+		if ($lang === null)
+		{
+			$lang = Arr::get($this->translations, $type . '.'  . $slugPrefix);
+
+			if ($lang === null || is_array($lang))
+			{
+				$lang = Arr::get($this->translations, $slug, $slug);
+				return $lang;
+			}
+
+			return $lang;
+		}
+
+		return $lang;
+	}
 
 }
