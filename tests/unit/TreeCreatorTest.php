@@ -37,11 +37,11 @@ class TreeCreatorTest extends Test
 		$this->assertArrayHasKey('child.md', $result['folder']);
 
 		$expected = [
-			'something-else.md' => 'something-else.md',
-			'test.md' => 'test.md',
 			'folder' => [
 				'child.md' => 'child.md'
 			],
+			'something-else.md' => 'something-else.md',
+			'test.md' => 'test.md',
 		];
 
 		$this->assertSame(

@@ -14,43 +14,54 @@ use Codeception\TestCase\Test;
 class NavigationTest extends Test
 {
 
-	public function testBreadcrumbs()
+	/**
+	 * breadcrumbs without translation
+	 */
+	public function testBasicBreadcrumbs()
 	{
-		$nav = new Navigation('foo', '');
+		$tree = (new TreeCreator)
+			->build(__DIR__.'/../_data/simple_tree');
+
+		$nav = new Navigation($tree, 'test.md', '');
 
 		$this->assertEquals(
-			['foo' => 'foo'],
+			['test.md' => 'test.md'],
 			$nav->getBreadcrumbList()
 		);
+	}
 
-		$nav->setTranslations(['foo' => 'Bar']);
+	/**
+	 * breadcrumbs with translation
+	 */
+	public function testTranslatedBreadcrumbs()
+	{
+		$tree = (new TreeCreator)
+			->setTranslations(['test.md' => 'FooBar'])
+			->build(__DIR__.'/../_data/simple_tree');
+
+		$nav = new Navigation($tree, 'test.md', '');
 
 		$this->assertEquals(
-			['foo' => 'Bar'],
+			['test.md' => 'FooBar'],
 			$nav->getBreadcrumbList()
 		);
 	}
 
 	public function testChildBreadcrumbs()
 	{
-		$nav = new Navigation('foo/bar/baz/bat', '');
-
-		$nav->setTranslations([
-			'foo' => 'Bar',
-			'_breadcrumbs' => [
-				'foo' => [
-					'bar' => [
-						'_title' => 'ABAR',
-						'baz' => [
-							'_title' => '123',
-						]
-					]
+		$tree = (new TreeCreator)
+			->setTranslations([
+				'folder' => [
+					'__title' => 'Bar',
+					'child.md' => 'ABAR',
 				]
-			]
-		]);
+			])
+			->build(__DIR__.'/../_data/simple_tree');
+
+		$nav = new Navigation($tree, 'folder/child.md', '');
 
 		$this->assertEquals(
-			['foo' => 'Bar', 'bar' => 'ABAR', 'baz' => '123', 'bat' => 'bat'],
+			['folder' => 'Bar', 'child.md' => 'ABAR'],
 			$nav->getBreadcrumbList()
 		);
 	}
