@@ -27,24 +27,97 @@ class TreeCreatorTest extends Test
 
 	public function testSimpleTree()
 	{
+		// fetch the default tree
 		$result = $this->creator->build(__DIR__.'/../_data/simple_tree');
 
-		$this->assertArrayHasKey('files', $result);
-		$this->assertArrayHasKey('folders', $result);
+		// verify all results are there
+		$this->assertArrayHasKey('test.md', $result);
+		$this->assertArrayHasKey('something-else.md', $result);
+		$this->assertArrayHasKey('folder', $result);
+		$this->assertArrayHasKey('child.md', $result['folder']);
 
-		$this->assertEquals(
-			['something-else.md', 'test.md',],
-			$result['files']
+		$expected = [
+			'something-else.md' => 'something-else.md',
+			'test.md' => 'test.md',
+			'folder' => [
+				'child.md' => 'child.md'
+			],
+		];
+
+		$this->assertSame(
+			$expected, $result
 		);
+	}
 
-		$this->assertArrayHasKey(
-			'folder',
-			$result['folders']
+	public function testSimpleTreeDescendingOrder()
+	{
+		// fetch the default tree
+		$result = $this->creator->build(__DIR__.'/../_data/simple_tree', TreeCreator::SORT_DESCENDING);
+
+		// verify all results are there
+		$this->assertArrayHasKey('test.md', $result);
+		$this->assertArrayHasKey('something-else.md', $result);
+		$this->assertArrayHasKey('folder', $result);
+		$this->assertArrayHasKey('child.md', $result['folder']);
+
+		$expected = [
+			'test.md' => 'test.md',
+			'something-else.md' => 'something-else.md',
+			'folder' => [
+				'child.md' => 'child.md'
+			],
+		];
+
+		$this->assertSame(
+			$expected, $result
 		);
+	}
 
-		$this->assertEquals(
-			['child.md'],
-			$result['folders']['folder']['files']
+	public function testSimpleTreeFoldersFirst()
+	{
+		// fetch the default tree
+		$result = $this->creator->build(__DIR__.'/../_data/simple_tree', TreeCreator::SORT_FOLDERS_FIRST);
+
+		// verify all results are there
+		$this->assertArrayHasKey('test.md', $result);
+		$this->assertArrayHasKey('something-else.md', $result);
+		$this->assertArrayHasKey('folder', $result);
+		$this->assertArrayHasKey('child.md', $result['folder']);
+
+		$expected = [
+			'folder' => [
+				'child.md' => 'child.md'
+			],
+			'something-else.md' => 'something-else.md',
+			'test.md' => 'test.md',
+		];
+
+		$this->assertSame(
+			$expected, $result
+		);
+	}
+
+	public function testSimpleTreeFilesDescendingFirst()
+	{
+		// fetch the default tree
+		$result = $this->creator->build(__DIR__.'/../_data/simple_tree', TreeCreator::SORT_FOLDERS_FIRST|TreeCreator::SORT_DESCENDING);
+
+		// verify all results are there
+		$this->assertArrayHasKey('test.md', $result);
+		$this->assertArrayHasKey('something-else.md', $result);
+		$this->assertArrayHasKey('folder', $result);
+		$this->assertArrayHasKey('child.md', $result['folder']);
+
+		$expected = [
+			'folder' => [
+				'child.md' => 'child.md'
+			],
+			'test.md' => 'test.md',
+			'something-else.md' => 'something-else.md',
+		];
+
+		$this->assertSame(
+			$expected, $result
 		);
 	}
 

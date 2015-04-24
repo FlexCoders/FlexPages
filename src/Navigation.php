@@ -105,24 +105,37 @@ class Navigation
 	 */
 	public function getTranslation($type, $slug, $slugPrefix)
 	{
-		// Check if we have a specific crumb translation
-		$lang = Arr::get(
-			$this->translations,
-			$type . '.' . $slugPrefix . '._name'
-		);
+		// do an initial lookup of the slug prefix
+		$lang = Arr::get($this->translations, $type . '.'  . $slugPrefix);
 
-		// TODO: Clean this mess up.
+		// did we find an array structure?
+		if (is_array($lang))
+		{
+			// fetch the slug from it
+			$lang = Arr::get($lang, $slug);
+
+			// if we hit an array again, we're on the wrong track
+			if (is_array($lang))
+			{
+				$lang = null;
+			}
+		}
+
+		// no hit on prefix? try the slug itself
 		if ($lang === null)
 		{
-			$lang = Arr::get($this->translations, $type . '.'  . $slugPrefix);
+			$lang = Arr::get($this->translations, $slug);
+		}
 
-			if ($lang === null || is_array($lang))
-			{
-				$lang = Arr::get($this->translations, $slug, $slug);
-				return $lang;
-			}
-
-			return $lang;
+		// still no hit?
+		if ($lang === null)
+		{
+			// check if we have a section title, and use the slug if there isn't one
+			$lang = Arr::get(
+				$this->translations,
+				$type . '.' . $slugPrefix . '._title',
+				$slug
+			);
 		}
 
 		return $lang;

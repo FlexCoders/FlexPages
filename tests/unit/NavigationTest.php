@@ -40,9 +40,9 @@ class NavigationTest extends Test
 			'_breadcrumbs' => [
 				'foo' => [
 					'bar' => [
-						'_name' => 'ABAR',
+						'_title' => 'ABAR',
 						'baz' => [
-							'_name' => '123',
+							'_title' => '123',
 						]
 					]
 				]
