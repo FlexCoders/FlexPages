@@ -43,6 +43,7 @@ class TreeCreator
 	const SORT_NONE = 0;
 	const SORT_ASCENDING = 1;
 	const SORT_DESCENDING = 2;
+	const SORT_TRANSLATIONS = 4;
 
 	/**
 	 * Type order constants
@@ -197,6 +198,40 @@ class TreeCreator
 			}
 		}
 
+		// do we need to other by translation sequence?
+		$translateOrder = [];
+		if ($order & static::SORT_TRANSLATIONS)
+		{
+			foreach($translations as $name => $unused)
+			{
+				if ($name !== '__title')
+				{
+					if ($order & static::SORT_FOLDERS_FIRST)
+					{
+						foreach ($folders as $folder => $entry)
+						{
+							if ($name === $folder)
+							{
+								$translateOrder[$folder] = $entry;
+								unset($folders[$folder]);
+								break;
+							}
+						}
+					}
+
+					foreach ($files as $file => $entry)
+					{
+						if ($name === $file or strpos($file, $name.'.') === 0)
+						{
+							$translateOrder[$file] = $entry;
+							unset($files[$file]);
+							break;
+						}
+					}
+				}
+			}
+		}
+
 		// sort the result if needed
 		if ($order & static::SORT_ASCENDING)
 		{
@@ -212,10 +247,10 @@ class TreeCreator
 		// and return in the order requested
 		if ($order & static::SORT_FOLDERS_FIRST)
 		{
-			return $folders + $files;
+			return $translateOrder + $folders + $files;
 		}
 
-		return $files + $folders;
+		return $translateOrder + $files + $folders;
 	}
 
 }
